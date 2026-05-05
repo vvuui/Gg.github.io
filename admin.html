@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة المشرف</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<style>
+body {
+  font-family: Arial;
+  direction: rtl;
+  background:#f4f6f9;
+  padding:20px;
+}
+
+.container {
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  max-width:900px;
+  margin:auto;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.title {
+  font-size:18px;
+  font-weight:bold;
+  color:#333;
+}
+
+button {
+  padding:10px;
+  margin:5px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#4CAF50;
+  color:#fff;
+}
+
+button:hover {
+  background:#43a047;
+}
+
+input {
+  padding:10px;
+  font-size:16px;
+  margin:5px;
+}
+
+table {
+  width:100%;
+  border-collapse: collapse;
+  margin-top:20px;
+}
+
+th, td {
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
+}
+
+th {
+  background:#222;
+  color:#fff;
+}
+
+.status {
+  margin:10px 0;
+  color:#555;
+}
+.credit {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  padding: 10px;
+}
+
+.credit span {
+  color: #4CAF50;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+  <div class="title" id="statusText">📅 سجل الحضور - اليوم</div>
+
+  <div>
+    <button onclick="loadToday()">اليوم</button>
+    <button onclick="loadYesterday()">أمس</button>
+  </div>
+
+</div>
+
+<div>
+  <input type="date" id="dateInput">
+</div>
+
+<table>
+<thead>
+<tr>
+<th>الاسم</th>
+<th>الهوية</th>
+<th>الوقت</th>
+<th>الموقع</th>
+</tr>
+</thead>
+
+<tbody id="table"></tbody>
+</table>
+
+</div>
+
+<script>
+
+/* Firebase */
+const firebaseConfig = {
+  apiKey: "AIzaSyDQIbSRsDjF0tcSTpICDsZJc0tHAqV4Ln0",
+  authDomain: "haij-79fdd.firebaseapp.com",
+  databaseURL: "https://haij-79fdd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "haij-79fdd",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const table = document.getElementById("table");
+const dateInput = document.getElementById("dateInput");
+const statusText = document.getElementById("statusText");
+
+/* =========================
+   التاريخ
+========================= */
+function getToday() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth()+1).padStart(2,'0') + "-" +
+    String(d.getDate()).padStart(2,'0');
+}
+
+function getYesterday() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+
+  return d.getFullYear() + "-" +
+    String(d.getMonth()+1).padStart(2,'0') + "-" +
+    String(d.getDate()).padStart(2,'0');
+}
+
+/* =========================
+   تحميل البيانات
+========================= */
+function loadData(date) {
+
+  db.ref("attendance/" + date).once("value", snap => {
+
+    table.innerHTML = "";
+
+    const data = snap.val();
+
+    if (!data) {
+      table.innerHTML = `<tr><td colspan="4">لا يوجد بيانات</td></tr>`;
+      return;
+    }
+
+    Object.values(data).forEach(r => {
+
+      table.innerHTML += `
+        <tr>
+          <td>${r.name}</td>
+          <td>${r.id}</td>
+          <td>${r.time}</td>
+          <td>${r.location || "غير معروف"}</td>
+        </tr>
+      `;
+    });
+
+  });
+}
+
+
+/* =========================
+   أزرار التحكم
+========================= */
+function loadToday() {
+  const today = getToday();
+  dateInput.value = today;
+  statusText.innerText = "📅 سجل الحضور - اليوم";
+  loadData(today);
+}
+
+function loadYesterday() {
+  const y = getYesterday();
+  dateInput.value = y;
+  statusText.innerText = "📅 سجل الحضور - أمس";
+  loadData(y);
+}
+
+/* تغيير التاريخ يدوي */
+dateInput.addEventListener("change", () => {
+  statusText.innerText = "📅 سجل الحضور - " + dateInput.value;
+  loadData(dateInput.value);
+});
+
+/* تشغيل تلقائي */
+window.onload = function () {
+  loadToday();
+};
+
+</script>
+<div class="credit">
+  تم تطوير نظام من قبل <span>MOHAMMED ALYAMI</span>
+</div>
+
+</body>
+</html>
