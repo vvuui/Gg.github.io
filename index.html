@@ -21,7 +21,7 @@
 
 <h2>نظام تسجيل الحضور</h2>
 
-<input id="nationalId" placeholder="ادخل رقم الهوية">
+<input id="nationalId" placeholder="ادخل رقم الجوال">
 <button onclick="checkAndRegister()">تسجيل الحضور</button>
 
 <p id="status">تنويه.. لا يمكن تسجيل الحضور إلا عند التواجد داخل نطاق موقع العمل الفعلي</p>
@@ -49,9 +49,9 @@ const db = firebase.database();
 /* =========================
    الموقع الثابت
 ========================= */
-const allowedLat = 17.5584772;
-const allowedLng = 44.3045860;
-const radiusMeters = 250;
+const allowedLat = 21.3428934;
+const allowedLng = 39.9615361;
+const radiusMeters = 400;
 
 /* =========================
    حساب المسافة
