@@ -1,6 +1,17 @@
 const employees = [
-  { id: "1120121379", name: "محمد" ,locationName: " مخيم 1" },
-  { id: "2020121379", name: "جعفر",locationName: " 21مخيم " },
-  { id: "3020121379", name: "احمد",locationName: " 251مخيم" },
-  { id: "4020121379", name: "حسين",locationName: " مخيم 221" }
+
+  { id: "0500073204", name: "جعفر خالد وبران" ,locationName: " مخيم 120" },
+
+  { id: "0543812474", name: "معتز مهل العنزي",locationName: " 120 مخيم" },
+
+  { id: "0536488680", name: "نايف حسين العنزي",locationName: " 120 مخيم" },
+
+  { id: "0547422172", name: "احمد عواد العنزي",locationName: " مخيم 120" },
+
+{ id: "0505892753", name: "معاذ خلف العنزي",locationName: " 120 مخيم" },
+
+{ id: "0549899856", name: "خالد محمد العنزي",locationName: " 120 مخيم" },
+
+{ id: "0564923650", name: "بكر عبدالعزيز فلاته",locationName: " 120 مخيم" },
+
 ];
